@@ -1,19 +1,20 @@
 #include "main.h"
-
-
 char **create_argv(char *str);
-int main()
+/**
+ * main - simple shell
+ * Return: 0 if succes -1 if fail
+ */
+int main(void)
 {
 	char *buff = NULL, **argv;
 	ssize_t r = 0;
 	size_t n = 0;
 	int val, i;
 	pid_t pid;
-	
-	while(1)
+
+	while (1)
 	{
-		write(1 , "$ ", 2);
-		
+		write(1, "$ ", 2);
 		r = getline(&buff, &n, stdin);
 		if (r == -1)
 		{
@@ -46,7 +47,11 @@ int main()
 	return (0);
 }
 
-
+/**
+ * create_argv - creates argument array to be passed to execve
+ * @str: input string
+ * Return: the array to be passed
+ */
 char **create_argv(char *str)
 {
 	int i, l;
