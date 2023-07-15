@@ -1,14 +1,16 @@
-include "main.h"
+#include "main.h"
 
 
 char **create_argv(char *str);
 int main()
 {
-	char *buff, *argv[];
-	size_t n,r;
-	int i, j, c, k;
-
-	n = 0, c = 0;
+	char *buff, **argv;
+	ssize_t r;
+	size_t n;
+	int val;
+	pid_t pid;
+	
+	n = 0;
 	while(1)
 	{
 		write(1, "$ ", 2);
@@ -19,38 +21,46 @@ int main()
 			break;
 		}
 		argv = create_argv(buff);
-
+		pid = fork();
+		if (pid == -1)
+			perror("Error");
+		else if (pid == 0)
+		{
+			val = execve(argv[0], argv, NULL);
+			if (val == -1)
+			perror("Error");
+		}
+		else
+			wait(NULL);
 		free(argv);
 	}
+	return (0);
 }
 
 
 char **create_argv(char *str)
 {
-	int i, n, l;
+	int i, l;
 	char **argv;
 	char *token;
 
-	n = 0, l = 0;
+	l = 0;
 	for (i = 0; str[i]; ++i)
-		n++;
-
-	for (i = 0; i < n; ++i)
 	{
-		if (str[i] && str[i] != ' ')
+		if (str[i] == ' ')
 			l++;
 	}
 
-	argv = malloc((l + 1) * sizeof(char *));
+	argv = malloc((l + 2) * sizeof(char *));
+	if (!argv)
+		return (NULL);
 	token = strtok(str, " ");
-	for (int i = 0; i < l; i++)
+	for (i = 0; i <= l; i++)
 	{
 		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
-		strcpy(argv[i], token);
+		_strcpy(argv[i], token);
 		token = strtok(NULL, " ");
 	}
-	argv[l] = '\0';
+	argv[l + 1] = NULL;
 	return (argv);
 }
-
-
