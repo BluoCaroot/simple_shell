@@ -10,7 +10,7 @@ int main()
 	int val;
 	pid_t pid;
 	
-	n = 0;
+	n = 0, buff = NULL;
 	while(1)
 	{
 		write(1, "$ ", 2);
@@ -33,6 +33,7 @@ int main()
 		else
 			wait(NULL);
 		free(argv);
+		free(buff);
 	}
 	return (0);
 }
