@@ -7,7 +7,7 @@ int main()
 	char *buff = NULL, **argv;
 	ssize_t r = 0;
 	size_t n = 0;
-	int val;
+	int val, i;
 	pid_t pid;
 	
 	while(1)
@@ -20,6 +20,11 @@ int main()
 			write(1, "\n", 1);
 			free(buff);
 			return (0);
+		}
+		for (i = 0; buff[i]; ++i)
+		{
+			if (buff[i] == '\n')
+				buff[i] = '\0';
 		}
 		argv = create_argv(buff);
 		pid = fork();
