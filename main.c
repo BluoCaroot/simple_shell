@@ -34,7 +34,10 @@ int main()
 		{
 			val = execve(argv[0], argv, NULL);
 			if (val == -1)
-			perror("Error");
+			{
+				perror("Error");
+				return (-1);
+			}
 		}
 		else
 			wait(NULL);
