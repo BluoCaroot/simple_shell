@@ -4,17 +4,17 @@
 char **create_argv(char *str);
 int main()
 {
-	char *buff, **argv;
-	ssize_t r;
-	size_t n;
+	char *buff = NULL, **argv;
+	ssize_t r = 0;
+	size_t n = 0;
 	int val;
 	pid_t pid;
 	
-	n = 0;
 	while(1)
 	{
-		write(1, "$ ", 2);
-		r = getline(&buff, &n, 0);
+		write(1 , "$ ", 2);
+		
+		r = getline(&buff, &n, stdin);
 		if (r == -1)
 		{
 			write(1, "\n", 1);
