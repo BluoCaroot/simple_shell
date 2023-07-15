@@ -18,7 +18,8 @@ int main()
 		if (r == -1)
 		{
 			write(1, "\n", 1);
-			break;
+			free(buff);
+			return (0);
 		}
 		argv = create_argv(buff);
 		pid = fork();
