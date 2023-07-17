@@ -28,6 +28,12 @@ int main(void)
 				buff[i] = '\0';
 		}
 		argv = create_argv(buff);
+		if(!argv)
+		{
+			write(1, "\n", 1);
+			free(buff);
+			return(0);
+		}
 		pid = fork();
 		if (pid == -1)
 			perror("Error");
@@ -72,6 +78,8 @@ char **create_argv(char *str)
 	for (i = 0; i <= l; i++)
 	{
 		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
+		if (!argv[i])
+			return(NULL);
 		_strcpy(argv[i], token);
 		token = strtok(NULL, " ");
 	}
