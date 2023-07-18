@@ -1,93 +1,102 @@
 #include "main.h"
-char **create_argv(char *str);
+void create_argv(info_t *info);
+void hsh(info_t *t);
 /**
  * main - simple shell
- * Return: 0 if succes -1 if fail
+ * @argc: number of arrguments
+ * @argv: array of arguments
+ * Return: 0 if succes 1 if fail
  */
-int main(void)
+int main(int argc, char **argv)
 {
-	char *buff = NULL, **argv;
-	ssize_t r = 0;
-	size_t n = 0;
-	int val, i;
-	pid_t pid;
-	list_t *env;
-
-	env = create_list();
-
-	while (1)
+	int fd;
+	info_t info[] = {INFO_INIT};
+	
+	if (argc == 2)
 	{
-		write(1, "$ ", 2);
-		r = getline(&buff, &n, stdin);
-		if (r == -1)
+		fd = open(argv[1], O_RDONLY);
+		if (fd == -1)
 		{
-			write(1, "\n", 1);
-			free(buff);
-			return (0);
-		}
-		for (i = 0; buff[i]; ++i)
-		{
-			if (buff[i] == '\n')
-				buff[i] = '\0';
-		}
-		argv = create_argv(buff);
-		if(!argv)
-		{
-			write(1, "\n", 1);
-			free(buff);
-			return(0);
-		}
-		iscommand(pth);
-		if (iscommand())
-			pid = fork();
-		if (pid == -1)
-			perror("Error");
-		else if (pid == 0)
-		{
-			val = execve(argv[0], argv, NULL);
-			if (val == -1)
+			if (errno == EACCES)
+				exit(126);
+			if (errno == ENOENT)
 			{
-				perror("Error");
-				return (-1);
+				eputs(argv[0]);
+				eputs(": 0: Can't open ");
+				eputs(argv[1]);
+				eputchar('\n');
+				eputchar(BUF_FLUSH);
+				exit(127);
 			}
-		}
-		else
-			wait(NULL);
-		free(argv);
+			return (EXIT_FAILURE);
+		}	
+		info->fd = fd;
 	}
-	return (0);
+	info->env = create_list();
+	info->path = path(info->env);
+	hsh(info);
+	return (EXIT_SUCCESS);
+}
+/**
+ * hsh - shell loop
+ * @info: list
+ * Return: void
+ */
+
+void hsh(info_t *info)
+{
+	int r, builtin;
+	size_t n;
+
+	r = 0, n = 0, builtin = 0;
+
+	while (r != -1)
+	{
+		clear_info(info);
+		if (interactive(info))
+			_putchar('$');
+		_putchar(BUF_FLUSH);
+		r = getline(&info->arg, &n, stdin);
+		if (r != -1)
+		{
+			create_argv(info);
+			builtin = isbuilt_in(info);
+			if (!builtin)
+				find_cmd(info);
+		}
+		else if (interactive(info))
+			_putchar('\n');
+		free_info(info);
+	}
+	free_info(info, 1);
+	/* here error status will be checked */
+
+
+	return;
 }
 
 /**
  * create_argv - creates argument array to be passed to execve
  * @str: input string
- * Return: the array to be passed
+ * Return: void
  */
-char **create_argv(char *str)
+void create_argv(info_t *info)
 {
-	int i, l;
-	char **argv;
-	char *token;
-
-	l = 0;
-	for (i = 0; str[i]; ++i)
+	int i, cnt = 0;
+	char * temp = strtok(info->arg, " ");
+	
+	for (i = 0; info->arg[i]; ++i)
+		if (info->arg[i] == ' ')
+			cnt++;
+	info->argv = malloc(sizeof(char *) * (cnt + 2));
+	i = 0;
+	while (temp)
 	{
-		if (str[i] == ' ')
-			l++;
+		info->argv[i] = temp;
+		temp = strtok(NULL, " ");
+		i++;
 	}
-
-	argv = malloc((l + 2) * sizeof(char *));
-	if (!argv)
-		return (NULL);
-	token = strtok(str, " ");
-	for (i = 0; i <= l; i++)
-	{
-		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
-		if (!argv[i])
-			return(NULL);
-		_strcpy(argv[i], token);
-		token = strtok(NULL, " ");
-	}
-	argv[l + 1] = NULL;
-	return (argv);
+	info->argv[i] = NULL;
+	info->argc = cnt + 1;
+	return;
 }

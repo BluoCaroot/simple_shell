@@ -1,27 +1,22 @@
 #include "main.h"
 
-char *path(char *argv0, list_t *head)
+char *path(list_t *head)
 {
-	char *pth;
 	list_t *temp;
 	temp = head;
 	while (temp)
 	{
-		if (_strncmp(temp->str, "PATH", 4));
+		if (_strncmp(temp->str, "PATH", 4))
 			temp = temp->next;
 		else
-		{
-
-			pth = &(temp->str[5]);
-			break;
-		}
+			return (&(temp->str[5]));
 			
 	}
-	return (pth);
+	return (NULL);
 
 }
 
-int add_node_end(list_t **node, char *str);
+int add_node_end(list_t *node, char *str);
 
 list_t *create_list(void)
 {
@@ -64,4 +59,8 @@ int add_node_end(list_t *head, char *str)
 	else
 		head = tail;
 	return (0);
+}
+int interactive(info_t *info)
+{
+	return (isatty(STDIN_FILENO) && info->fd <= 2);
 }
