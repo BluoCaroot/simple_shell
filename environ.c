@@ -1,14 +1,5 @@
 #include "main.h"
 
-int iscommand(char *argv0, char *pth)
-{
-	if (argv0 == "exit")
-		exit();
-	else (argv0 == "")
-
-
-
-}
 char *path(char *argv0, list_t *head)
 {
 	char *pth;
