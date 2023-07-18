@@ -11,6 +11,9 @@ int main(void)
 	size_t n = 0;
 	int val, i;
 	pid_t pid;
+	list_t *env;
+
+	env = create_list();
 
 	while (1)
 	{

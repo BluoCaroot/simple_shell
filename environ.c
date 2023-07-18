@@ -1,23 +1,46 @@
 #include "main.h"
 
-/**
- * _getenv - gets environments
- * @name: environment variable to get
- * Return: pointer to the variable if found NULL if not
- */
+int add_node_end(list_t **node, char *str);
 
-char *_getenv(const char *name)
+list_t *create_list(void)
 {
-	size_t namelen = _strlen(name);
-	char **envp = environ;
+	int i, temp;
+	list_t *head = NULL;
 
-	while (*envp != NULL)
+	for (i = 0; environ[i]; ++i)
 	{
-		if (strncmp(name, *envp, namelen) == 0 && (*envp)[namelen] == '=')
-		{
-			return (&((*envp)[namelen + 1]));
-		}
-		envp++;
+		temp = add_node_end(head, environ[i]);
+		if (temp == -1)
+			perror("error");
 	}
-	return (NULL);
+	return (head);
+}
+
+
+int add_node_end(list_t *head, char *str)
+{
+	list_t *tail, *temp;
+
+	temp = head;
+	tail = malloc(sizeof(list_t));
+	if (!tail)
+		return (-1);
+	if (str)
+	{
+		tail->str = _strdup(str);
+		if (!tail->str)
+		{
+			free(tail);
+			return (-1);
+		}
+	}
+	if (temp)
+	{
+		while (temp->next)
+			temp = temp->next;
+		temp->next = tail;
+	}
+	else
+		head = tail;
+	return (0);
 }

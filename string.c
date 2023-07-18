@@ -19,25 +19,21 @@ int _strlen(char *s)
 }
 
 /**
- * _strcmp - compares two strings
- *
- * @s1: input value
- * @s2: input value
- *
- * Return: s1[i] - s2[i]
+ * _strncmp - compares first n characters of 2 strings
+ * @s1: first string
+ * @s2: second string
+ * Return: s1 - s2
  */
-int _strcmp(char *s1, char *s2)
+int _strncmp(const char *s1, const char *s2, int n)
 {
 	int i;
 
-	i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0')
+	for (i = 0; i < n; i++)
 	{
-		if (s1[i] != s2[i])
+		if (s1[i] != s2[i] || s1[i] == '\0' || s2[i] == '\0')
 		{
 			return (s1[i] - s2[i]);
 		}
-		i++;
 	}
 	return (0);
 }
@@ -81,14 +77,16 @@ char *_strcat(char *dest, char *src)
 	return (dest);
 }
 
-/**
- * _putchar - writes the chracter c to stdout
- * @c: the character to print
- *
- * Return: on success 1.
- * On error, -1 is returned, and errno is set appropriately.
+/** _strdup - duplicates a string
+ * @s: string to dup
+ * Return: duplicated string
  */
-int _putchar(char c)
-{
-	return (write(1, &c, 1));
+char *_strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *p = malloc(len);
+
+    if (p != NULL) {
+        memcpy(p, s, len);
+    }
+    return (p);
 }
