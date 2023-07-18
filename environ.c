@@ -1,5 +1,35 @@
 #include "main.h"
 
+int iscommand(char *argv0, char *pth)
+{
+	if (argv0 == "exit")
+		exit();
+	else (argv0 == "")
+
+
+
+}
+char *path(char *argv0, list_t *head)
+{
+	char *pth;
+	list_t *temp;
+	temp = head;
+	while (temp)
+	{
+		if (_strncmp(temp->str, "PATH", 4));
+			temp = temp->next;
+		else
+		{
+
+			pth = &(temp->str[5]);
+			break;
+		}
+			
+	}
+	return (pth);
+
+}
+
 int add_node_end(list_t **node, char *str);
 
 list_t *create_list(void)

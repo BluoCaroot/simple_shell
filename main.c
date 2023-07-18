@@ -37,7 +37,9 @@ int main(void)
 			free(buff);
 			return(0);
 		}
-		pid = fork();
+		iscommand(pth);
+		if (iscommand())
+			pid = fork();
 		if (pid == -1)
 			perror("Error");
 		else if (pid == 0)
