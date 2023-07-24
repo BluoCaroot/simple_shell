@@ -43,6 +43,7 @@ list_t *create_list(void);
 
 typedef struct passedinfo
 {
+	char *program;
         char *arg;
         char **argv;
         char *path;
@@ -53,7 +54,7 @@ typedef struct passedinfo
         int fd;
         int linecnt;
 } info_t;
-#define INFO_INIT {NULL, NULL, NULL, 0, NULL, 0, 0, 0, 0}
+#define INFO_INIT {argv[0], NULL, NULL, NULL, 0, NULL, 0, 0, 0, 0}
 
 /* global variables and macros */
 
