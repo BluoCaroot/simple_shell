@@ -54,7 +54,7 @@ typedef struct passedinfo
         int fd;
         int linecnt;
 } info_t;
-#define INFO_INIT {argv[0], NULL, NULL, NULL, 0, NULL, 0, 0, 0, 0}
+#define INFO_INIT  {NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, 0}
 
 /* global variables and macros */
 
@@ -70,5 +70,6 @@ int find_cmd(info_t *info);
 char *path(list_t *head);
 void free_info(info_t *info, int n);
 void free_list(list_t *list);
-
+void clear_info(info_t *info);
+void print_env(info_t *info);
 #endif
