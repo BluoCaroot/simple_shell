@@ -1,6 +1,8 @@
 #include "main.h"
 void create_argv(info_t *info);
 void hsh(info_t *t);
+void not_found(info_t *info);
+char *to_string(int n);
 /**
  * main - simple shell
  * @argc: number of arrguments
@@ -11,6 +13,7 @@ int main(int argc, char **argv)
 {
 	int fd;
 	info_t info[] = {INFO_INIT};
+	info->program = argv[0];
 	
 	if (argc == 2)
 	{
@@ -99,4 +102,37 @@ void create_argv(info_t *info)
 	info->argv[i] = NULL;
 	info->argc = cnt + 1;
 	return;
+}
+void not_found(info_t *info)
+{
+	char *cnt = to_string(info->linecnt);
+
+	eputs(info->program);
+	eputs(": ");
+	eputs(cnt);
+	eputs(": Can't open ");
+	eputs(info->argv[0]);
+	eputchar('\n');
+	eputchar(BUF_FLUSH);
+	free(cnt);
+	return;
+}
+char *to_string(int n)
+{
+	char *s;
+	int cnt = 0, temp;
+
+	temp = n;
+	while (temp)
+	{
+		temp /= 10;
+		cnt++;
+	}
+	s = malloc(cnt);
+	while (n)
+	{
+		s[--cnt] = n % 10;
+		n /= 10;
+	}
+	return (s);
 }
