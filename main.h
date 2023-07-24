@@ -66,6 +66,7 @@ extern char **environ;
 int isbuilt_in(info_t *info);
 int iscommand(char *path);
 int interactive(info_t *info);
+int find_cmd(info_t *info);
 char *path(list_t *head);
 
 

@@ -62,7 +62,8 @@ void hsh(info_t *info)
 			create_argv(info);
 			builtin = isbuilt_in(info);
 			if (!builtin)
-				find_cmd(info);
+				if (!find_cmd(info))
+					not_found(info);
 		}
 		else if (interactive(info))
 			_putchar('\n');
