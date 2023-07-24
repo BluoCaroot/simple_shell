@@ -58,8 +58,6 @@ typedef struct passedinfo
 /* global variables and macros */
 
 extern char **environ;
-#define BUF_MAX 1024
-#define BUF_FLUSH -1
 
 /* shell commands */
 

@@ -2,6 +2,8 @@
 void free_info(info_t info, int n = 0)
 {
 	if (n = 1)
+		free(info->env->str);
+		free(info->env->next);
 		free(info->env);
 		free(info->path);
 	for (i = 0; argv[i]; i++)
@@ -9,4 +11,4 @@ void free_info(info_t info, int n = 0)
 	free(argv);
 	free(arg);
 	return;
-}
+
