@@ -58,7 +58,8 @@ typedef struct passedinfo
 /* global variables and macros */
 
 extern char **environ;
-
+#define BUF_MAX 1024
+#define BUF_FLUSH -1
 /* shell commands */
 
 int isbuilt_in(info_t *info);
@@ -66,6 +67,7 @@ int iscommand(char *path);
 int interactive(info_t *info);
 int find_cmd(info_t *info);
 char *path(list_t *head);
+void free_info(info_t info, int n);
 
 
 #endif

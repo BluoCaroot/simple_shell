@@ -66,7 +66,7 @@ void hsh(info_t *info)
 		}
 		else if (interactive(info))
 			_putchar('\n');
-		free_info(info);
+		free_info(info, 0);
 	}
 	free_info(info, 1);
 	/* here error status will be checked */
