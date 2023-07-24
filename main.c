@@ -54,8 +54,7 @@ void hsh(info_t *info)
 	{
 		clear_info(info);
 		if (interactive(info))
-			_putchar('$');
-		_putchar(BUF_FLUSH);
+			write(1, "$ ", 2);
 		r = getline(&info->arg, &n, stdin);
 		if (r != -1)
 		{
