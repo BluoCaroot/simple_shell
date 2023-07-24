@@ -1,6 +1,6 @@
 #include "main.h"
 void fork_cmd(info_t *info, char *path);
-void print_env(info_t info)
+void print_env(info_t *info)
 {
 	list_t temp;
 	temp = info->env;
