@@ -1,11 +1,21 @@
 #include "main.h"
 void fork_cmd(info_t *info, char *path);
+void print_env(info_t info)
+{
+	list_t temp;
+	temp = info->env;
+	while(temp)
+	{
+	write(1, temp->str, _strlen(temp->str));
+	temp = temp->next;
+	}
+}
 int isbuilt_in(info_t *info)
 {
 	if (!(strncmp(info->argv[0], "exit", 4)))
 		exit(0);
 	if (!(strncmp(info->argv[0], "env", 3)))
-		env(info);
+		print_env(info);
 	else
 		return (0);
 	return (1);
