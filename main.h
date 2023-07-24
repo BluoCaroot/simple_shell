@@ -67,7 +67,7 @@ int iscommand(char *path);
 int interactive(info_t *info);
 int find_cmd(info_t *info);
 char *path(list_t *head);
-void free_info(info_t info, int n);
-
+void free_info(info_t *info, int n);
+void free_list(list_t *list);
 
 #endif
