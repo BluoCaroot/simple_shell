@@ -65,28 +65,31 @@ char *_strcpy(char *dest, char *src)
  *
  * Return: pointer to destination buffer
  */
-char *_strcat(char *dest, char *src)
+void *_strcat(char *dest, char *src)
 {
-	int i = 0, j = 0;
+	int i, j;
 
+	i = 0, j = 0;
 	while (dest[i])
 		i++;
 	while (src[j])
-		dest[i] = src[j], i++, j++;
-	dest[i] = src[j];
-	return (dest);
+		dest[i++] = src[j++];
+	dest[i] = '\0';
 }
 
 /** _strdup - duplicates a string
  * @s: string to dup
  * Return: duplicated string
  */
-char *_strdup(const char *s) {
-    size_t len = strlen(s) + 1;
+char *_strdup(char *s) {
+    int len = _strlen(s) + 1, i;
     char *p = malloc(len);
 
-    if (p != NULL) {
-        memcpy(p, s, len);
+    if (p != NULL)
+    {
+	for (i = 0; s[i]; ++i)
+		p[i] = s[i];
+	p[i] = '\0';
     }
     return (p);
 }

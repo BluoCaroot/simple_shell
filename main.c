@@ -50,6 +50,7 @@ void hsh(info_t *info)
 {
 	int r, builtin;
 	size_t n;
+	int i;
 
 	r = 0, n = 0, builtin = 0;
 
@@ -59,6 +60,11 @@ void hsh(info_t *info)
 		if (interactive(info))
 			write(1, "$ ", 2);
 		r = getline(&info->arg, &n, stdin);
+		for (i = 0; info->arg[i]; ++i)
+		{
+			if (info->arg[i] == '\n')
+				info->arg[i] = '\0';
+		}
 		if (r != -1)
 		{
 			create_argv(info);
@@ -68,7 +74,7 @@ void hsh(info_t *info)
 					not_found(info);
 		}
 		else if (interactive(info))
-			_putchar('\n');
+			write(1, "\n", 1);
 		free_info(info, 0);
 	}
 	free_info(info, 1);
@@ -85,23 +91,28 @@ void hsh(info_t *info)
  */
 void create_argv(info_t *info)
 {
-	int i, cnt = 0;
-	char * temp = strtok(info->arg, " ");
-	
+	int i, l;
+	char **argv;
+	char *token;
+
+	l = 0;
 	for (i = 0; info->arg[i]; ++i)
-		if (info->arg[i] == ' ')
-			cnt++;
-	info->argv = malloc(sizeof(char *) * (cnt + 2));
-	i = 0;
-	while (temp)
 	{
-		info->argv[i] = temp;
-		temp = strtok(NULL, " ");
-		i++;
+		if (info->arg[i] == ' ')
+			l++;
 	}
-	info->argv[i] = NULL;
-	info->argc = cnt + 1;
-	return;
+	argv = malloc((l + 2) * sizeof(char *));
+	if (!argv)
+		return;
+	token = strtok(info->arg, " ");
+	for (i = 0; i <= l; ++i)
+	{
+		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
+		_strcpy(argv[i], token);
+		token = strtok(NULL, " ");
+	}
+	argv[l + 1] = NULL;
+	info->argv = argv;
 }
 void not_found(info_t *info)
 {
@@ -128,10 +139,11 @@ char *to_string(int n)
 		temp /= 10;
 		cnt++;
 	}
-	s = malloc(cnt);
+	s = malloc(cnt + 1);
+	s[cnt] = 0;
 	while (n)
 	{
-		s[--cnt] = n % 10;
+		s[--cnt] = (n % 10) + '0';
 		n /= 10;
 	}
 	return (s);

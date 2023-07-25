@@ -16,7 +16,7 @@ char *path(list_t *head)
 
 }
 
-int add_node_end(list_t *node, char *str);
+int add_node_end(list_t **node, char *str);
 
 list_t *create_list(void)
 {
@@ -25,7 +25,7 @@ list_t *create_list(void)
 
 	for (i = 0; environ[i]; ++i)
 	{
-		temp = add_node_end(head, environ[i]);
+		temp = add_node_end(&head, environ[i]);
 		if (temp == -1)
 			perror("error");
 	}
@@ -33,11 +33,11 @@ list_t *create_list(void)
 }
 
 
-int add_node_end(list_t *head, char *str)
+int add_node_end(list_t **head, char *str)
 {
 	list_t *tail, *temp;
 
-	temp = head;
+	temp = *head;
 	tail = malloc(sizeof(list_t));
 	if (!tail)
 		return (-1);
@@ -57,7 +57,7 @@ int add_node_end(list_t *head, char *str)
 		temp->next = tail;
 	}
 	else
-		head = tail;
+		*head = tail;
 	return (0);
 }
 int interactive(info_t *info)

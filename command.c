@@ -3,11 +3,13 @@ void fork_cmd(info_t *info, char *path);
 void print_env(info_t *info)
 {
 	list_t *temp;
+	
 	temp = info->env;
 	while(temp)
 	{
-	write(1, temp->str, _strlen(temp->str));
-	temp = temp->next;
+		write(1, temp->str, _strlen(temp->str));
+		write(1, "\n", 1);
+		temp = temp->next;
 	}
 }
 int isbuilt_in(info_t *info)
@@ -24,45 +26,62 @@ int isbuilt_in(info_t *info)
 
 int iscommand(char *path)
 {
+	int x;
 	struct stat fileStat;
-
-	if (stat(path, &fileStat) == 0)
+	
+	x = stat(path, &fileStat);
+	if (!x)
 	{
-		if (fileStat.st_mode & S_IXUSR || fileStat.st_mode & S_IXGRP || fileStat.st_mode & S_IXOTH) 
+		if (fileStat.st_mode & S_IFREG) 
 			return (1);
-	return (0);
+		return (0);
 	}
 		return (0);
 }
 
 int find_cmd(info_t *info)
 {
-	int i, cnt = 0;
-        char * temp = strtok(info->path, ":"), **paths;
+	int i, l, r = 0;
+	char **paths, *temp, *token, *path;
 
-        for (i = 0; info->path[i]; ++i)
-                if (info->path[i] == ':')
-                        cnt++;
-        paths = malloc(sizeof(char *) * (cnt + 2));
-        i = 0;
-        while (temp)
-        {
-                paths[i] = temp;
-                temp = strtok(NULL, ":");
-                i++;
-        }
-      	paths[i] = NULL;
-        
-	for (i = 0; i < cnt + 2; ++i)
+	l = 0, temp = _strdup(info->path);
+	for (i = 0; temp[i]; ++i)
 	{
-		temp = _strcat(paths[i], info->argv[0]);
-		if (iscommand(temp))
+		if (temp[i]  == ':')
+			l++;
+	}
+	paths = malloc((l + 2) * sizeof(char *));
+	if (!paths)
+		return (-1);
+	token = strtok(temp, ":");
+	for (i = 0; i <= l; ++i)
+	{
+		paths[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
+		_strcpy(paths[i], token);
+		token = strtok(NULL, ":");
+	}
+	paths[l + 1] = NULL;
+	free(temp);
+	path = malloc(1024);
+	for (i = 0; i < l + 1 && !r; ++i)
+	{
+		path = _strcpy(path, paths[i]);
+		_strcat(path, "/");
+		_strcat(path, info->argv[0]);
+
+		if (iscommand(path))
 		{
-			fork_cmd(info, temp);
-			return (1);
+			info->argv[0] = path;
+			fork_cmd(info, path);
+			r = 1;
 		}
 	}
-        return (0);
+	for (i = 0; paths[i]; ++i)
+	{
+		free(paths[i]);
+	}
+	free(paths);
+        return (r);
 }
 
 void fork_cmd(info_t *info, char *path)
@@ -82,5 +101,4 @@ void fork_cmd(info_t *info, char *path)
 	}
 	else
 		wait(NULL);
-	return;
 }
