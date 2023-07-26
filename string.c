@@ -65,7 +65,7 @@ char *_strcpy(char *dest, char *src)
  *
  * Return: pointer to destination buffer
  */
-void *_strcat(char *dest, char *src)
+void _strcat(char *dest, char *src)
 {
 	int i, j;
 

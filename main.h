@@ -19,7 +19,7 @@ int _strlen(char *s);
 int _strncmp(const char *s1, const char *s2, int n);
 char *_strdup(char *s);
 char *_strcpy(char *dest, char *src);
-void *_strcat(char *dest, char *src);
+void _strcat(char *dest, char *src);
 int _putchar(char c);
 
 /* error functions */
