@@ -27,6 +27,12 @@ void free_list(list_t *list)
 	}
 
 }
+/**
+ * free_info - free info struct
+ * @info: info struct
+ * @n: free case
+ * Return: void
+ */
 void free_info(info_t *info, int n)
 {
 	int i;
@@ -41,6 +47,11 @@ void free_info(info_t *info, int n)
 	if (info->argv)
 		free(info->argv);
 }
+/**
+ * clear_info - clears info at beginning of loop
+ * @info: info struct
+ * Return: void
+ */
 void clear_info(info_t *info)
 {
 	info->argc = 0;

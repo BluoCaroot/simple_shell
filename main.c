@@ -13,8 +13,8 @@ int main(int argc, char **argv)
 {
 	int fd;
 	info_t info[] = {INFO_INIT};
+
 	info->program = argv[0];
-	
 	if (argc == 2)
 	{
 		fd = open(argv[1], O_RDONLY);
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 				exit(127);
 			}
 			return (EXIT_FAILURE);
-		}	
+		}
 		info->fd = fd;
 	}
 	info->env = create_list();
@@ -68,10 +68,13 @@ void hsh(info_t *info)
 		if (r != -1)
 		{
 			create_argv(info);
-			builtin = isbuilt_in(info);
-			if (!builtin)
-				if (!find_cmd(info))
-					not_found(info);
+			if (info->argv)
+			{
+				builtin = isbuilt_in(info);
+				if (!builtin)
+					if (!find_cmd(info))
+						not_found(info);
+			}
 		}
 		else if (interactive(info))
 			write(1, "\n", 1);
@@ -79,41 +82,52 @@ void hsh(info_t *info)
 	}
 	free_info(info, 1);
 	/* here error status will be checked */
-
-
-	return;
+	if (info->status)
+		exit(info->status);
 }
 
 /**
  * create_argv - creates argument array to be passed to execve
- * @str: input string
+ * @info: info struct
  * Return: void
  */
 void create_argv(info_t *info)
 {
 	int i, l;
 	char **argv;
-	char *token;
+	char *temp, *token;
 
-	l = 0;
-	for (i = 0; info->arg[i]; ++i)
+	l = 0, temp = _strdup(info->arg);
+	token = strtok(temp, " ");
+	while (token)
 	{
-		if (info->arg[i] == ' ')
+		if (_strlen(token))
 			l++;
+		token = strtok(NULL, " ");
 	}
-	argv = malloc((l + 2) * sizeof(char *));
+	free(temp);
+	if (!l)
+		return;
+	argv = malloc((l + 1) * sizeof(char *));
 	if (!argv)
 		return;
 	token = strtok(info->arg, " ");
-	for (i = 0; i <= l; ++i)
+	for (i = 0; i < l; ++i)
 	{
 		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
 		_strcpy(argv[i], token);
 		token = strtok(NULL, " ");
 	}
-	argv[l + 1] = NULL;
+
+
+	argv[l] = NULL;
 	info->argv = argv;
 }
+/**
+ * not_found - outputs not found on stderr
+ * @info: info struct
+ * Return: void
+ */
 void not_found(info_t *info)
 {
 	char *cnt = to_string(info->linecnt);
@@ -121,13 +135,19 @@ void not_found(info_t *info)
 	eputs(info->program);
 	eputs(": ");
 	eputs(cnt);
-	eputs(": Can't open ");
+	eputs(": ");
 	eputs(info->argv[0]);
+	eputs(": not found");
 	eputchar('\n');
 	eputchar(BUF_FLUSH);
 	free(cnt);
-	return;
+	info->status = 127;
 }
+/**
+ * to_string - converts int to sting
+ * @n: int to convert
+ * Return: converted string
+ */
 char *to_string(int n)
 {
 	char *s;

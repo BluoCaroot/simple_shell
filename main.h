@@ -36,25 +36,35 @@ void eputchar(char c);
  */
 typedef struct environlst
 {
-        char *str;
-        struct environlst *next;
+	char *str;
+	struct environlst *next;
 } list_t;
 list_t *create_list(void);
-
+/**
+ * struct passedinfo - info passed to functions
+ * @program: name of program
+ * @arg: args got by getline
+ * @argv: args passed to execve
+ * @path: path variable
+ * @argc: argument count
+ * @env: enviroment variables
+ * @status: exit status
+ * @fd: open file
+ * @linecnt: line count
+ */
 typedef struct passedinfo
 {
 	char *program;
-        char *arg;
-        char **argv;
-        char *path;
-        int argc;
-        list_t *env;
-        int err;
-        int status;
-        int fd;
-        int linecnt;
+	char *arg;
+	char **argv;
+	char *path;
+	int argc;
+	list_t *env;
+	int status;
+	int fd;
+	int linecnt;
 } info_t;
-#define INFO_INIT  {NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0, 0}
+#define INFO_INIT  {NULL, NULL, NULL, NULL, 0, NULL, 0, 0, 0}
 
 /* global variables and macros */
 

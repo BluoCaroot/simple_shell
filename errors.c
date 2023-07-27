@@ -1,5 +1,9 @@
 #include "main.h"
-
+/**
+ * eputs - puts string to stderr
+ * @str: string to put
+ * Return: void
+ */
 void eputs(char *str)
 {
 	int i;
@@ -7,7 +11,11 @@ void eputs(char *str)
 	for (i = 0; str[i]; ++i)
 		eputchar(str[i]);
 }
-
+/**
+ * eputchar - puts char to stderr
+ * @c: char to put
+ * Return: void
+ */
 void eputchar(char c)
 {
 	static int i;

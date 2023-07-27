@@ -22,6 +22,7 @@ int _strlen(char *s)
  * _strncmp - compares first n characters of 2 strings
  * @s1: first string
  * @s2: second string
+ * @n: number of chars to compare
  * Return: s1 - s2
  */
 int _strncmp(const char *s1, const char *s2, int n)
@@ -77,19 +78,21 @@ void _strcat(char *dest, char *src)
 	dest[i] = '\0';
 }
 
-/** _strdup - duplicates a string
+/**
+ * _strdup - duplicates a string
  * @s: string to dup
  * Return: duplicated string
  */
-char *_strdup(char *s) {
-    int len = _strlen(s) + 1, i;
-    char *p = malloc(len);
+char *_strdup(char *s)
+{
+	int len = _strlen(s) + 1, i;
+	char *p = malloc(len);
 
-    if (p != NULL)
-    {
-	for (i = 0; s[i]; ++i)
-		p[i] = s[i];
-	p[i] = '\0';
-    }
-    return (p);
+	if (p != NULL)
+	{
+		for (i = 0; s[i]; ++i)
+			p[i] = s[i];
+		p[i] = '\0';
+	}
+	return (p);
 }
