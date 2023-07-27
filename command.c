@@ -127,7 +127,7 @@ void fork_cmd(info_t *info, char *path)
 	}
 	else if (!pid)
 	{
-		val = execve(path, info->argv, NULL);
+		val = execve(path, info->argv, list_to_str(info->env));
 		if (val == -1)
 		{
 			if (errno == EACCES)
