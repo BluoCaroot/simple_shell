@@ -84,3 +84,42 @@ int interactive(info_t *info)
 {
 	return (isatty(STDIN_FILENO) && info->fd <= 2);
 }
+/**
+ * list_to_str - converts linked list to array of strings
+ * @head: env list
+ * Return: env strings
+ */
+char **list_to_str(list_t *head)
+{
+	list_t *node = head;
+	int i = 0, j;
+	char **ans, *temp;
+
+	if (!head)
+		return (NULL);
+	while (node)
+	{
+		i++;
+		node = node->next;
+	}
+	if (!i)
+		return (NULL);
+	ans = malloc(sizeof(char *) * (i + 1));
+	if (!ans)
+		return (NULL);
+	for (i = 0, node = head; node; node = node->next, ++i)
+	{
+		temp = malloc(_strlen(node->str) + 1);
+		if (!temp)
+		{
+			for (j = 0; j < i; ++j)
+				free(ans[j]);
+			free(ans);
+			return (NULL);
+		}
+		temp = _strcpy(temp, node->str);
+		ans[i] = temp;
+	}
+	ans[i] = NULL;
+	return (ans);
+}
