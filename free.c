@@ -45,7 +45,7 @@ void free_info(info_t *info, int n)
 	}
 	for (i = 0; info->argv && (info->argv[i]); i++)
 		free(info->argv[i]);
-	if(info->argv)
+	if (info->argv)
 		free(info->argv);
 }
 /**
