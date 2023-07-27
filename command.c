@@ -25,7 +25,10 @@ void print_env(info_t *info)
 int isbuilt_in(info_t *info)
 {
 	if (!(strncmp(info->argv[0], "exit", 4)))
+	{
+		free_info(info, 1);
 		exit(info->status);
+	}
 	if (!(strncmp(info->argv[0], "env", 3)))
 		print_env(info);
 	else

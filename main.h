@@ -83,4 +83,5 @@ void free_info(info_t *info, int n);
 void free_list(list_t *list);
 void clear_info(info_t *info);
 void print_env(info_t *info);
+char *_memset(char *s, char b, unsigned int n);
 #endif

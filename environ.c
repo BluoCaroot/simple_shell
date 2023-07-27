@@ -56,6 +56,7 @@ int add_node_end(list_t **head, char *str)
 	tail = malloc(sizeof(list_t));
 	if (!tail)
 		return (-1);
+	_memset((void *)tail, 0, sizeof(list_t));
 	if (str)
 	{
 		tail->str = _strdup(str);

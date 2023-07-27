@@ -38,6 +38,8 @@ int main(int argc, char **argv)
 	info->env = create_list();
 	info->path = path(info->env);
 	hsh(info);
+	if (info->fd)
+		close(info->fd);
 	return (EXIT_SUCCESS);
 }
 /**
@@ -60,13 +62,13 @@ void hsh(info_t *info)
 		if (interactive(info))
 			write(1, "$ ", 2);
 		r = getline(&info->arg, &n, stdin);
-		for (i = 0; info->arg[i]; ++i)
-		{
-			if (info->arg[i] == '\n')
-				info->arg[i] = '\0';
-		}
 		if (r != -1)
 		{
+			for (i = 0; info->arg[i]; ++i)
+			{
+				if (info->arg[i] == '\n')
+					info->arg[i] = '\0';
+			}
 			create_argv(info);
 			if (info->argv)
 			{
@@ -107,10 +109,16 @@ void create_argv(info_t *info)
 	}
 	free(temp);
 	if (!l)
+	{
+		free(token);
 		return;
+	}
 	argv = malloc((l + 1) * sizeof(char *));
 	if (!argv)
+	{
+		free(token);
 		return;
+	}
 	token = strtok(info->arg, " ");
 	for (i = 0; i < l; ++i)
 	{
@@ -118,8 +126,7 @@ void create_argv(info_t *info)
 		_strcpy(argv[i], token);
 		token = strtok(NULL, " ");
 	}
-
-
+	free(token);
 	argv[l] = NULL;
 	info->argv = argv;
 }
