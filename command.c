@@ -76,7 +76,7 @@ int find_cmd(info_t *info)
 		}
 		paths = malloc((l + 2) * sizeof(char *));
 		if (!paths)
-			return (-1);
+			return (0);
 		token = strtok(temp, ":");
 		for (i = 0; i <= l; ++i)
 		{
@@ -93,7 +93,8 @@ int find_cmd(info_t *info)
 			_strcat(path, info->argv[0]);
 			if (iscommand(path))
 			{
-				info->argv[0] = path;
+				free(info->argv[0]);
+				info->argv[0] = _strdup(path);
 				fork_cmd(info, path);
 				r = 1;
 			}
@@ -111,6 +112,7 @@ int find_cmd(info_t *info)
 	}
 	if (paths)
 		free(paths);
+	free(path);
 	return (r);
 }
 /**

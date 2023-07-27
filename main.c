@@ -95,7 +95,7 @@ void hsh(info_t *info)
  */
 void create_argv(info_t *info)
 {
-	int i, l;
+	int i, j, l;
 	char **argv;
 	char *temp, *token;
 
@@ -109,24 +109,24 @@ void create_argv(info_t *info)
 	}
 	free(temp);
 	if (!l)
-	{
-		free(token);
 		return;
-	}
 	argv = malloc((l + 1) * sizeof(char *));
 	if (!argv)
-	{
-		free(token);
 		return;
-	}
 	token = strtok(info->arg, " ");
 	for (i = 0; i < l; ++i)
 	{
 		argv[i] = (char *) malloc(sizeof(char) * (_strlen(token) + 1));
+		if (!argv[i])
+		{
+			for (j = 0; j < i; ++j)
+				free(argv[j]);
+			free(argv);
+			return;
+		}
 		_strcpy(argv[i], token);
 		token = strtok(NULL, " ");
 	}
-	free(token);
 	argv[l] = NULL;
 	info->argv = argv;
 }

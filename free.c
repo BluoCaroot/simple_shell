@@ -40,11 +40,12 @@ void free_info(info_t *info, int n)
 	if (n == 1)
 	{
 		free_list(info->env);
-		free(info->arg);
+		if (info->arg)
+			free(info->arg);
 	}
-	for (i = 0; info->argv && info->argv[i]; i++)
+	for (i = 0; info->argv && (info->argv[i]); i++)
 		free(info->argv[i]);
-	if (info->argv)
+	if(info->argv)
 		free(info->argv);
 }
 /**
@@ -54,6 +55,7 @@ void free_info(info_t *info, int n)
  */
 void clear_info(info_t *info)
 {
+	free(info->arg);
 	info->argc = 0;
 	info->arg = NULL;
 	info->argv = NULL;
